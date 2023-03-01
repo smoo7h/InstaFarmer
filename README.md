@@ -1,4 +1,4 @@
-![](logo.png)
+![]<img src="logo.png" width="256" height="348">
 
 
 InstaFarmer is a modern Javascript library (API) for Instagram automation/bot that utilizes Google's Puppeteer. Its aim is to provide a straightforward setup, user-friendly experience, and flexibility to abide by Instagram's regulations.
