@@ -1,0 +1,34 @@
+{
+  "name": "instafarmer",
+  "version": "1.0.0",
+  "description": "Farm insta enganement",
+  "main": "src/index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "exit 0"
+  },
+  "files": [
+    "src"
+  ],
+  "author": "smoo7h",
+  "repository": "smoo7h/InstaFarmer",
+  "license": "GNU GENERAL PUBLIC LICENSE",
+  "engines": {
+    "node": ">=8"
+  },
+  "dependencies": {
+    "fs-extra": "^5.0.0",
+    "instauto": "^9.2.1",
+    "lodash": "^4.17.10",
+    "puppeteer-core": "^19.7.2",
+    "puppeteer-extra": "^3.3.4",
+    "puppeteer-extra-plugin-stealth": "^2.11.1",
+    "user-agents": "^1.0.559"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "puppeteer": "^19.7.2"
+  }
+}
