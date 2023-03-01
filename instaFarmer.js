@@ -2,7 +2,7 @@
 const { accounts, comments } = require('./appsettings.js');
 const puppeteer = require('puppeteer'); // eslint-disable-line import/no-extraneous-dependencies
 
-const Instauto = require('instauto'); // eslint-disable-line import/no-unresolved
+const InstaFarmer = require('./src'); // eslint-disable-line import/no-unresolved
 
 // Optional: Custom logger with timestamps
 const log = (fn, ...args) => console[fn](new Date().toISOString(), ...args);
@@ -82,7 +82,7 @@ const options = {
     });
 
     // Create a database where state will be loaded/saved to
-    const instautoDb = await Instauto.JSONDB({
+    const instafarmerDb = await InstaFarmer.JSONDB({
       // Will store a list of all users that have been followed before, to prevent future re-following.
       followedDbPath: './followed.json',
       // Will store all unfollowed users here
@@ -91,26 +91,26 @@ const options = {
       likedPhotosDbPath: './liked-photos.json',
     });
 
-    const instauto = await Instauto(instautoDb, browser, options);
+    const instafarmer = await InstaFarmer(instafarmerDb, browser, options);
 
     // This can be used to unfollow people:
     // Will unfollow auto-followed AND manually followed accounts who are not following us back, after some time has passed
     // The time is specified by config option dontUnfollowUntilTimeElapsed
-    // await instauto.unfollowNonMutualFollowers();
-    // await instauto.sleep(10 * 60 * 1000);
+    // await instafarmer.unfollowNonMutualFollowers();
+    // await instafarmer.sleep(10 * 60 * 1000);
 
     // Unfollow previously auto-followed users (regardless of whether or not they are following us back)
     // after a certain amount of days (2 weeks)
     // Leave room to do following after this too (unfollow 2/3 of maxFollowsPerDay)
-    const unfollowedCount = await instauto.unfollowOldFollowed({ ageInDays: 14, limit: options.maxFollowsPerDay * (2 / 3) });
+    const unfollowedCount = await instafarmer.unfollowOldFollowed({ ageInDays: 14, limit: options.maxFollowsPerDay * (2 / 3) });
 
-    if (unfollowedCount > 0) await instauto.sleep(10 * 60 * 1000);
+    if (unfollowedCount > 0) await instafarmer.sleep(10 * 60 * 1000);
 
     // List of usernames that we should follow the followers of, can be celebrities etc.
     const usersToFollowFollowersOf = accounts;
 
     // Now go through each of these and follow a certain amount of their followers
-    await instauto.followUsersFollowers({
+    await instafarmer.followUsersFollowers({
       usersToFollowFollowersOf,
       maxFollowsTotal: options.maxFollowsPerDay - unfollowedCount,
       skipPrivate: true,
@@ -118,11 +118,11 @@ const options = {
       likeImagesMax: 3,
     });
 
-    await instauto.sleep(10 * 60 * 1000);
+    await instafarmer.sleep(10 * 60 * 1000);
 
     console.log('Done running');
 
-    await instauto.sleep(30000);
+    await instafarmer.sleep(30000);
   } catch (err) {
     console.error(err);
   } finally {

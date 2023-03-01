@@ -5,6 +5,8 @@ const accounts = [
 	'ai.art.daily.e'
 ];
 
+const dryRun = true;
+
 const tags = [
 	'#21savage',
 	'#420',
@@ -13,9 +15,6 @@ const tags = [
 	'#almondbutterflavor',
 	'#almondbuttertoast',
 	'#alternative',
-	'#animememes',
-	'#animemes',
-	'#anotherdayintheoffice',
 ];
 
 const comments = [
@@ -48,4 +47,4 @@ const comments = [
   
 
 
-module.exports = { accounts, comments };
+module.exports = { accounts, comments, dryRun };

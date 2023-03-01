@@ -30,7 +30,7 @@ const botWorkShiftHours = 16;
 const dayMs = 24 * 60 * 60 * 1000;
 const hourMs = 60 * 60 * 1000;
 
-const Instauto = async (db, browser, options) => {
+const InstaFarmer = async (db, browser, options) => {
   const {
     instagramBaseUrl = 'https://www.instagram.com',
     cookiesPath,
@@ -590,19 +590,19 @@ const Instauto = async (db, browser, options) => {
 
     const numImagesToLike = Math.floor((Math.random() * ((likeImagesMax + 1) - likeImagesMin)) + likeImagesMin);
 
-    instautoLog(`Liking ${numImagesToLike} image(s)`);
+    instafarmerLog(`Liking ${numImagesToLike} image(s)`);
 
     const images = imagesShuffled.slice(0, numImagesToLike);
 
     if (images.length < 1) {
-      instautoLog('No images to like');
+      instafarmerLog('No images to like');
       return;
     }
 
     for (const image of images) {
       image.click();
 
-      await window.instautoSleep(3000);
+      await window.instafarmerSleep(3000);
 
       const dialog = document.querySelector('*[role=dialog]');
 
@@ -632,7 +632,7 @@ const Instauto = async (db, browser, options) => {
 
       if (!foundClickable) throw new Error('Like button not found');
 
-      const instautoLog2 = instautoLog;
+      const instafarmerLog2 = instafarmerLog;
 
       // eslint-disable-next-line no-inner-declarations
       function likeImage() {
@@ -651,24 +651,24 @@ const Instauto = async (db, browser, options) => {
             ({ poster } = video);
             ({ src } = video);
           } else {
-            instautoLog2('Could not determin mediaType');
+            instafarmerLog2('Could not determin mediaType');
           }
 
           if (!shouldLikeMediaIn({ mediaType, mediaDesc, src, alt, poster })) {
-            instautoLog2(`shouldLikeMedia returned false for ${image.href}, skipping`);
+            instafarmerLog2(`shouldLikeMedia returned false for ${image.href}, skipping`);
             return;
           }
         }
 
         foundClickable.click();
-        window.instautoOnImageLiked(image.href);
+        window.instafarmerOnImageLiked(image.href);
       }
 
       if (!dryRunIn) {
         likeImage();
       }
 
-      await window.instautoSleep(3000);
+      await window.instafarmerSleep(3000);
 
       const closeButtonChild = document.querySelector('svg[aria-label="Close"]');
 
@@ -680,10 +680,10 @@ const Instauto = async (db, browser, options) => {
 
       closeButton.click();
 
-      await window.instautoSleep(5000);
+      await window.instafarmerSleep(5000);
     }
 
-    instautoLog('Done liking images');
+    instafarmerLog('Done liking images');
   }
   /* eslint-enable no-undef */
 
@@ -695,9 +695,9 @@ const Instauto = async (db, browser, options) => {
 
     logger.log(`Liking ${likeImagesMin}-${likeImagesMax} user images`);
     try {
-      await page.exposeFunction('instautoSleep', sleep);
-      await page.exposeFunction('instautoLog', (...args) => console.log(...args));
-      await page.exposeFunction('instautoOnImageLiked', (href) => onImageLiked({ username, href }));
+      await page.exposeFunction('instafarmerSleep', sleep);
+      await page.exposeFunction('instafarmerLog', (...args) => console.log(...args));
+      await page.exposeFunction('instafarmerOnImageLiked', (href) => onImageLiked({ username, href }));
     } catch (err) {
       // Ignore already exists error
     }
@@ -1208,6 +1208,6 @@ const Instauto = async (db, browser, options) => {
   };
 };
 
-Instauto.JSONDB = JSONDB;
+InstaFarmer.JSONDB = JSONDB;
 
-module.exports = Instauto;
+module.exports = InstaFarmer;
