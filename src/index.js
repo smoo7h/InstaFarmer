@@ -1,5 +1,6 @@
 'use strict';
 
+const { accounts, comments, dryRun } = require('../appsettings.js');
 const assert = require('assert');
 const fs = require('fs-extra');
 const { join } = require('path');
@@ -29,6 +30,8 @@ const botWorkShiftHours = 16;
 
 const dayMs = 24 * 60 * 60 * 1000;
 const hourMs = 60 * 60 * 1000;
+
+//console.log(comments);
 
 const InstaFarmer = async (db, browser, options) => {
   const {
@@ -86,7 +89,7 @@ const InstaFarmer = async (db, browser, options) => {
 
   // State
   let page;
-
+  
   async function takeScreenshot() {
     if (!screenshotOnError) return;
     try {
@@ -575,7 +578,10 @@ const InstaFarmer = async (db, browser, options) => {
   /* eslint-disable no-undef */
   async function likeCurrentUserImagesPageCode({ dryRun: dryRunIn, likeImagesMin, likeImagesMax, shouldLikeMedia: shouldLikeMediaIn }) {
     const allImages = Array.from(document.getElementsByTagName('a')).filter(el => /instagram.com\/p\//.test(el.href));
-
+    console.log('****');
+    const thisComment = comments[r(0, comments.length)];
+    console.log(thisComment);
+    debugger;
     // eslint-disable-next-line no-shadow
     function shuffleArray(arrayIn) {
       const array = [...arrayIn];
@@ -608,11 +614,15 @@ const InstaFarmer = async (db, browser, options) => {
 
       if (!dialog) throw new Error('Dialog not found');
 
+      const instafarmerLog2 = instafarmerLog;
+
       const section = Array.from(dialog.querySelectorAll('section')).find(s => s.querySelectorAll('*[aria-label="Like"]')[0] && s.querySelectorAll('*[aria-label="Comment"]')[0]);
 
       if (!section) throw new Error('Like button section not found');
 
       const likeButtonChild = section.querySelectorAll('*[aria-label="Like"]')[0];
+      
+
 
       if (!likeButtonChild) throw new Error('Like button not found (aria-label)');
 
@@ -632,7 +642,10 @@ const InstaFarmer = async (db, browser, options) => {
 
       if (!foundClickable) throw new Error('Like button not found');
 
-      const instafarmerLog2 = instafarmerLog;
+
+      
+      await window.instafarmerSleep(3000);
+     
 
       // eslint-disable-next-line no-inner-declarations
       function likeImage() {
@@ -660,12 +673,46 @@ const InstaFarmer = async (db, browser, options) => {
           }
         }
 
+     
         foundClickable.click();
         window.instafarmerOnImageLiked(image.href);
       }
 
+      function commentImage(comment) {
+        
+         
+          const commentArea = document.querySelectorAll('[aria-label="Add a comment…"]')[0];
+
+          commentArea.click();
+          commentArea.focus();
+          
+
+          var nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, "value").set;
+          nativeInputValueSetter.call(commentArea, comment);
+          
+          var ev2 = new Event('input', { bubbles: true});
+          commentArea.dispatchEvent(ev2);
+
+
+          const postButton = Array.from(document.querySelectorAll('[role="button"]')).find(
+            (button) => button.textContent === 'Post'
+          );
+
+          window.instafarmerSleep(50000);
+          //postButton.click();
+
+      }
+
+
+
       if (!dryRunIn) {
         likeImage();
+        await window.instafarmerSleep(3000);
+        const thisComment = comments[r(0, comments.length)];
+        debugger;
+        commentImage(thisComment);
+        await window.instafarmerSleep(4000);
+
       }
 
       await window.instafarmerSleep(3000);
@@ -702,8 +749,9 @@ const InstaFarmer = async (db, browser, options) => {
       // Ignore already exists error
     }
 
-    await page.evaluate(likeCurrentUserImagesPageCode, { dryRun, likeImagesMin, likeImagesMax, shouldLikeMedia });
+    await page.evaluate(likeCurrentUserImagesPageCode, { dryRun, likeImagesMin, likeImagesMax, shouldLikeMedia },);
   }
+  
 
   async function followUserRespectingRestrictions({ username, skipPrivate = false }) {
     if (getPrevFollowedUser(username)) {
@@ -912,6 +960,11 @@ const InstaFarmer = async (db, browser, options) => {
 
   if (enableCookies) await tryLoadCookies();
 
+  
+  const checkBot = async () => gotoUrl(`https://bot.sannysoft.com/`);
+  
+ // await checkBot();
+
   const goHome = async () => gotoUrl(`${instagramBaseUrl}/?hl=en`);
 
 
@@ -1002,7 +1055,11 @@ const InstaFarmer = async (db, browser, options) => {
     return false;
   }
 
+
+
   await setEnglishLang(false);
+
+
 
   await tryPressButton(await page.$x('//button[contains(text(), "Accept")]'), 'Accept cookies dialog');
   await tryPressButton(await page.$x('//button[contains(text(), "Only allow essential cookies")]'), 'Accept cookies dialog 2 button 1', 10000);

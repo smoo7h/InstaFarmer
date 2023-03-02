@@ -1,6 +1,18 @@
 'use strict';
-const { accounts, comments } = require('./appsettings.js');
+
+
+
+require('dotenv').config();
+const { accounts, comments, dryRun } = require('./appsettings.js');
 const puppeteer = require('puppeteer'); // eslint-disable-line import/no-extraneous-dependencies
+
+/* Stealth pluggin
+
+const puppeteer = require('puppeteer-extra');
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+puppeteer.use(StealthPlugin());
+
+*/
 
 const InstaFarmer = require('./src'); // eslint-disable-line import/no-unresolved
 
@@ -14,6 +26,7 @@ const options = {
   username: process.env.USER,
   password: process.env.PW,
 
+
   // Global limit that prevents follow or unfollows (total) to exceed this number over a sliding window of one hour:
   maxFollowsPerHour: 20,
   // Global limit that prevents follow or unfollows (total) to exceed this number over a sliding window of one day:
@@ -23,15 +36,17 @@ const options = {
   maxLikesPerDay: 200,
 
   // Don't follow users that have a followers / following ratio less than this:
-  followUserRatioMin: 0.2,
+  followUserRatioMin: 0.1,
+   //followUserRatioMin: 0.2,
   // Don't follow users that have a followers / following ratio higher than this:
-  followUserRatioMax: 4.0,
+  followUserRatioMax: 9.0,
+  //followUserRatioMax: 4.0,
   // Don't follow users who have more followers than this:
   followUserMaxFollowers: null,
   // Don't follow users who have more people following them than this:
   followUserMaxFollowing: null,
   // Don't follow users who have less followers than this:
-  followUserMinFollowers: 50,
+  followUserMinFollowers: 20,
   // Don't follow users who have more people following them than this:
   followUserMinFollowing: null,
 
@@ -65,7 +80,7 @@ const options = {
   excludeUsers: [],
 
   // If true, will not do any actions (defaults to true)
-  dryRun: true,
+  dryRun: dryRun,
 
   logger,
 };
@@ -73,10 +88,13 @@ const options = {
 (async () => {
   let browser;
 
+
+
   try {
     browser = await puppeteer.launch({
       // set headless: false first if you need to debug and see how it works
       headless: false,
+      devtools: true
       // If you need to proxy: (see also https://www.chromium.org/developers/design-documents/network-settings)
       // args: ['--proxy-server=127.0.0.1:9876'],
     });
@@ -102,6 +120,7 @@ const options = {
     // Unfollow previously auto-followed users (regardless of whether or not they are following us back)
     // after a certain amount of days (2 weeks)
     // Leave room to do following after this too (unfollow 2/3 of maxFollowsPerDay)
+    
     const unfollowedCount = await instafarmer.unfollowOldFollowed({ ageInDays: 14, limit: options.maxFollowsPerDay * (2 / 3) });
 
     if (unfollowedCount > 0) await instafarmer.sleep(10 * 60 * 1000);

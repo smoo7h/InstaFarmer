@@ -1,8 +1,9 @@
 
 const accounts = [
-	'_saeseol_',
-	'edgejourney.art',
-	'ai.art.daily.e'
+	'blake.187.ai',
+	//'_saeseol_',
+	//'edgejourney.art',
+	//'ai.art.daily.e'
 ];
 
 const dryRun = true;
@@ -23,6 +24,7 @@ const comments = [
 	'Absolutely beautiful',
 	'This picture is giving me all the feels',
 	'Gorgeous',
+	'So dope',
 	'So much detail captured in this',
 	"I can't stop looking at this",
 	'This is a work of art',
