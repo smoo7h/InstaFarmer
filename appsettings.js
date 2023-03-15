@@ -1,12 +1,12 @@
 
 const accounts = [
-	'blake.187.ai',
-	//'_saeseol_',
-	//'edgejourney.art',
-	//'ai.art.daily.e'
+	'boffln',
+	'_saeseol_',
+	'edgejourney.art',
+	'ai.art.daily.e'
 ];
 
-const dryRun = true;
+const dryRun = false;
 
 const tags = [
 	'#21savage',

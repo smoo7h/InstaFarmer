@@ -31,7 +31,6 @@ const botWorkShiftHours = 16;
 const dayMs = 24 * 60 * 60 * 1000;
 const hourMs = 60 * 60 * 1000;
 
-//console.log(comments);
 
 const InstaFarmer = async (db, browser, options) => {
   const {
@@ -579,7 +578,7 @@ const InstaFarmer = async (db, browser, options) => {
   async function likeCurrentUserImagesPageCode({ dryRun: dryRunIn, likeImagesMin, likeImagesMax, shouldLikeMedia: shouldLikeMediaIn }) {
     const allImages = Array.from(document.getElementsByTagName('a')).filter(el => /instagram.com\/p\//.test(el.href));
     //console.log('****');
-    const thisComment = comments[r(0, comments.length)];
+    //const thisComment = comments[r(0, comments.length)];
     //console.log(thisComment);
     //debugger;
     // eslint-disable-next-line no-shadow
