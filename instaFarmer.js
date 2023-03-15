@@ -94,7 +94,7 @@ const options = {
     browser = await puppeteer.launch({
       // set headless: false first if you need to debug and see how it works
       headless: false,
-      devtools: true
+      devtools: false
       // If you need to proxy: (see also https://www.chromium.org/developers/design-documents/network-settings)
       // args: ['--proxy-server=127.0.0.1:9876'],
     });

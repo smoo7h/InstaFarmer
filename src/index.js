@@ -578,10 +578,10 @@ const InstaFarmer = async (db, browser, options) => {
   /* eslint-disable no-undef */
   async function likeCurrentUserImagesPageCode({ dryRun: dryRunIn, likeImagesMin, likeImagesMax, shouldLikeMedia: shouldLikeMediaIn }) {
     const allImages = Array.from(document.getElementsByTagName('a')).filter(el => /instagram.com\/p\//.test(el.href));
-    console.log('****');
+    //console.log('****');
     const thisComment = comments[r(0, comments.length)];
-    console.log(thisComment);
-    debugger;
+    //console.log(thisComment);
+    //debugger;
     // eslint-disable-next-line no-shadow
     function shuffleArray(arrayIn) {
       const array = [...arrayIn];
@@ -708,9 +708,9 @@ const InstaFarmer = async (db, browser, options) => {
       if (!dryRunIn) {
         likeImage();
         await window.instafarmerSleep(3000);
-        const thisComment = comments[r(0, comments.length)];
-        debugger;
-        commentImage(thisComment);
+        //const thisComment = comments[r(0, comments.length)];
+        //debugger;
+        //commentImage(thisComment);
         await window.instafarmerSleep(4000);
 
       }
